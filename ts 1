@@ -1,299 +1,445 @@
-import java.sql.Date;                                                                                                                                                                                                   
-import java.time.LocalDate;                                                                                                                                                                                             
-import java.util.ArrayList;                                                                                                                                                                                             
-import java.util.Scanner;                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-class Person {                                                                                                                                                                                                          
-    String name;                                                                                                                                                                                                        
-    String profession;                                                                                                                                                                                                  
-    int bookCount;                                                                                                                                                                                                      
-                                                                                                                                                                                                                        
-    public Person(String name, String profession, int bookCount) {                                                                                                                                                      
-        this.name = name;                                                                                                                                                                                               
-        this.profession = profession;                                                                                                                                                                                   
-        this.bookCount = bookCount;                                                                                                                                                                                     
-    }                                                                                                                                                                                                                   
-}                                                                                                                                                                                                                       
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-class Book{                                                                                                                                                                                                             
-    String name;                                                                                                                                                                                                        
-    int id;                                                                                                                                                                                                             
-    String borrowerName;                                                                                                                                                                                                
-    LocalDate issueDate;                                                                                                                                                                                                
-    LocalDate returnDate;                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-    public Book(String name, int id, String borrowerName, LocalDate issueDate, LocalDate returnDate) {                                                                                                                  
-        this.name = name;                                                                                                                                                                                               
-        this.id = id;                                                                                                                                                                                                   
-        this.borrowerName = borrowerName;                                                                                                                                                                               
-        this.issueDate = issueDate;                                                                                                                                                                                     
-        this.returnDate = returnDate;                                                                                                                                                                                   
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    public void setBorrowerName(String borrowerName) {                                                                                                                                                                  
-        this.borrowerName = borrowerName;                                                                                                                                                                               
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    public void setIssueDate(LocalDate issueDate) {                                                                                                                                                                     
-        this.issueDate = issueDate;                                                                                                                                                                                     
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    public void setReturnDate(LocalDate returnDate) {                                                                                                                                                                   
-        this.returnDate = returnDate;                                                                                                                                                                                   
-    }                                                                                                                                                                                                                   
-}                                                                                                                                                                                                                       
-                                                                                                                                                                                                                        
-class BookMenu {                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-    void showBooks(){                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-        for( Book book : Main.books)                                                                                                                                                                                    
-        {                                                                                                                                                                                                               
-            System.out.println(book.id + "." + book.name + "\n");                                                                                                                                                       
-        }                                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-        if(Main.books.isEmpty()) { System.out.println("SORRY NO BOOK IS AVAILABLE IN DATABASE!!!");return;}                                                                                                             
-        System.out.println("Enter book no for further details or 0 for return");                                                                                                                                        
-        int c;                                                                                                                                                                                                          
-        Scanner in = new Scanner(System.in);                                                                                                                                                                            
-        c  = in.nextInt();                                                                                                                                                                                              
-                                                                                                                                                                                                                        
-        Book selectedBook = searchBookId(c);                                                                                                                                                                            
-                                                                                                                                                                                                                        
-        if(selectedBook == null)                                                                                                                                                                                        
-        {                                                                                                                                                                                                               
-            return;                                                                                                                                                                                                     
-        }                                                                                                                                                                                                               
-        //show details of this book now;                                                                                                                                                                                
-                                                                                                                                                                                                                        
-        else{                                                                                                                                                                                                           
-            showDetails(selectedBook);                                                                                                                                                                                  
-        }                                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    private void showDetails(Book selectedBook) {                                                                                                                                                                       
-        System.out.println("Book id : " + selectedBook.id + "\nBook Name: " + selectedBook.name );                                                                                                                      
-                                                                                                                                                                                                                        
-            if(selectedBook.borrowerName != null)                                                                                                                                                                       
-            {                                                                                                                                                                                                           
-                System.out.println("This book has been issued.");                                                                                                                                                       
-                System.out.println("BorrowerName: " + selectedBook.borrowerName + " Issue Date: " + selectedBook.issueDate + " Return Date: " + selectedBook.returnDate);                                               
-                                                                                                                                                                                                                        
-            }                                                                                                                                                                                                           
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-            System.out.println("\nOptions available for this books");                                                                                                                                                   
-            System.out.println("1.DeleteBook 2.IssueBook 3.ReturnBook");                                                                                                                                                
-            Scanner in = new Scanner(System.in);                                                                                                                                                                        
-            int o = in.nextInt();                                                                                                                                                                                       
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-            switch ( o )                                                                                                                                                                                                
-            {                                                                                                                                                                                                           
-                case 1: Main.books.remove(selectedBook);                                                                                                                                                                
-                    System.out.println("Book has been Deleted Successfully!!..");                                                                                                                                       
-                    break;                                                                                                                                                                                              
-                                                                                                                                                                                                                        
-                case 2:                                                                                                                                                                                                 
-                                                                                                                                                                                                                        
-                    if(selectedBook.borrowerName != null ) {  System.out.println("Error! This book is already issued!"); return; }                                                                                      
-                                                                                                                                                                                                                        
-                    //else                                                                                                                                                                                              
-                                                                                                                                                                                                                        
-                    System.out.println("Enter Borrower Name and Profession");                                                                                                                                           
-                    String bName = in.next();                                                                                                                                                                           
-                    String profession = in.next();                                                                                                                                                                      
-                                                                                                                                                                                                                        
-                    Person person = findPerson(bName,profession);                                                                                                                                                       
-                                                                                                                                                                                                                        
-                    if(person == null) {                                                                                                                                                                                
-                        person = new Person(bName, profession ,0);                                                                                                                                                      
-                        Main.persons.add(person);                                                                                                                                                                       
-                    }                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-                    if(person.profession.equals("student"))                                                                                                                                                             
-                    {                                                                                                                                                                                                   
-                        if(person.bookCount >2)                                                                                                                                                                         
-                        {                                                                                                                                                                                               
-                            System.out.println("Error !! Can't borrow books more than 5 for a student");                                                                                                                
-                            break;                                                                                                                                                                                      
-                        }                                                                                                                                                                                               
-                    }                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-                    else if(person.profession.equals("faculty"))                                                                                                                                                        
-                    {                                                                                                                                                                                                   
-                        if(person.bookCount >3)                                                                                                                                                                         
-                        {                                                                                                                                                                                               
-                            System.out.println("Error !! Can't borrow books more than 10 for a faculty");                                                                                                               
-                        }                                                                                                                                                                                               
-                        break;                                                                                                                                                                                          
-                    }                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-                    person.bookCount++;                                                                                                                                                                                 
-                    selectedBook.setBorrowerName(person.name);                                                                                                                                                          
-                                                                                                                                                                                                                        
-                    System.out.println("Enter Issue Date(Year,Month,Day)");                                                                                                                                             
-                    LocalDate iDate = LocalDate.of(in.nextInt(),in.nextInt(),in.nextInt());                                                                                                                             
-                    selectedBook.setIssueDate(iDate);                                                                                                                                                                   
-                                                                                                                                                                                                                        
-                    if(person.profession.equals("student"))                                                                                                                                                             
-                    {                                                                                                                                                                                                   
-                        selectedBook.setReturnDate(selectedBook.issueDate.plusDays(15));                                                                                                                                
-                    }                                                                                                                                                                                                   
-                    else                                                                                                                                                                                                
-                    {                                                                                                                                                                                                   
-                        selectedBook.setReturnDate(selectedBook.issueDate.plusDays(30));                                                                                                                                
-                    }                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-                    System.out.println("Book has been Issued Successfully...");                                                                                                                                         
-                    break;                                                                                                                                                                                              
-                                                                                                                                                                                                                        
-                case 3:                                                                                                                                                                                                 
-                    System.out.println("Return Book in process.....");                                                                                                                                                  
-                                                                                                                                                                                                                        
-                        if(Main.today.compareTo(selectedBook.returnDate) > 7)                                                                                                                                           
-                        {                                                                                                                                                                                               
-                            int span2 = Main.today.compareTo(selectedBook.returnDate) - 7;                                                                                                                              
-                            double charge = 7 * 2.50;                                                                                                                                                                   
-                            charge += span2 * 5;                                                                                                                                                                        
-                                                                                                                                                                                                                        
-                            System.out.println("Charged for the late return (after " + span2 + 7 + "days) is " + "Rs." + charge);                                                                                       
-                            System.out.println("....................");                                                                                                                                                 
-                            System.out.println("This book is successfully returned now..");                                                                                                                             
-                                                                                                                                                                                                                        
-                            selectedBook.borrowerName = null;                                                                                                                                                           
-                            selectedBook.setReturnDate(null);                                                                                                                                                           
-                            selectedBook.setIssueDate(null);                                                                                                                                                            
-                        }                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-                        else if(Main.today.compareTo(selectedBook.returnDate) <= 7 && Main.today.compareTo(selectedBook.returnDate) > 0)                                                                                
-                        {  double charge = Main.today.compareTo(selectedBook.returnDate) * 2.50;                                                                                                                        
-                            System.out.println("Charged for the late return (after " +Main.today.compareTo(selectedBook.returnDate)  + "days) is " + "Rs." + charge);                                                   
-                            System.out.println("....................");                                                                                                                                                 
-                            System.out.println("This book is successfully returned now..");                                                                                                                             
-                                                                                                                                                                                                                        
-                            selectedBook.borrowerName = null;                                                                                                                                                           
-                            selectedBook.setReturnDate(null);                                                                                                                                                           
-                            selectedBook.setIssueDate(null);                                                                                                                                                            
-                        }                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-                    else {                                                                                                                                                                                              
-                        System.out.println("This book has been returned with no charge.");                                                                                                                              
-                                                                                                                                                                                                                        
-                        selectedBook.borrowerName = null;                                                                                                                                                               
-                        selectedBook.setReturnDate(null);                                                                                                                                                               
-                        selectedBook.setIssueDate(null);                                                                                                                                                                
-                    }                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-            }                                                                                                                                                                                                           
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    private Person findPerson(String bName, String profession) {                                                                                                                                                        
-        for(Person person: Main.persons)                                                                                                                                                                                
-        {                                                                                                                                                                                                               
-            if(bName.equals(person.name) && profession.equals(person.profession))                                                                                                                                       
-            {                                                                                                                                                                                                           
-                return person;                                                                                                                                                                                          
-            }                                                                                                                                                                                                           
-                                                                                                                                                                                                                        
-        }                                                                                                                                                                                                               
-        return null;                                                                                                                                                                                                    
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    private Book searchBookId(int c)                                                                                                                                                                                    
-    {                                                                                                                                                                                                                   
-        for(Book book : Main.books)                                                                                                                                                                                     
-        {                                                                                                                                                                                                               
-            if(book.id == c)                                                                                                                                                                                            
-            {                                                                                                                                                                                                           
-                return book;                                                                                                                                                                                            
-            }                                                                                                                                                                                                           
-        }                                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-        return null;                                                                                                                                                                                                    
-    }                                                                                                                                                                                                                   
-}                                                                                                                                                                                                                       
-                                                                                                                                                                                                                        
-class BookWork{                                                                                                                                                                                                         
-                                                                                                                                                                                                                        
-}                                                                                                                                                                                                                       
-                                                                                                                                                                                                                        
-public class Main{                                                                                                                                                                                                      
-    static ArrayList<Book> books = new ArrayList<>();                                                                                                                                                                   
-    static ArrayList<Person> persons = new ArrayList<>();                                                                                                                                                               
-    static LocalDate today = LocalDate.now();                                                                                                                                                                           
-    public static void main(String[] args)                                                                                                                                                                              
-    {                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-        while(true)                                                                                                                                                                                                     
-        {                                                                                                                                                                                                               
-            System.out.println("\n\nHi Today is: " + Main.today);                                                                                                                                                       
-            System.out.println("1.Add Books 2.Show Books 3.(Today + 1) 4.(Today - 1) 5.(Today + 5) 6.(Today -5) 7.Notices");                                                                                            
-            int c;                                                                                                                                                                                                      
-            Scanner in = new Scanner(System.in);                                                                                                                                                                        
-            c = in.nextInt();                                                                                                                                                                                           
-            switch (c)                                                                                                                                                                                                  
-            {                                                                                                                                                                                                           
-                case 1: addBook();                                                                                                                                                                                      
-                    break;                                                                                                                                                                                              
-                                                                                                                                                                                                                        
-                case 2: BookMenu bookMenu = new BookMenu();                                                                                                                                                             
-                    bookMenu.showBooks();                                                                                                                                                                               
-                    break;                                                                                                                                                                                              
-                                                                                                                                                                                                                        
-                case 3: Main.today = Main.today.plusDays(1);                                                                                                                                                            
-                        break;                                                                                                                                                                                          
-                                                                                                                                                                                                                        
-                case 4: Main.today = Main.today.plusDays(-1);                                                                                                                                                           
-                        break;                                                                                                                                                                                          
-                                                                                                                                                                                                                        
-                case 5: Main.today = Main.today.plusDays(5);                                                                                                                                                            
-                        break;                                                                                                                                                                                          
-                                                                                                                                                                                                                        
-                case 6: Main.today = Main.today.plusDays(-5);                                                                                                                                                           
-                        break;                                                                                                                                                                                          
-                                                                                                                                                                                                                        
-                case 7: for(Book book: Main.books)                                                                                                                                                                      
-                        {                                                                                                                                                                                               
-                            if(book.returnDate == null)                                                                                                                                                                 
-                            {                                                                                                                                                                                           
-                                continue;                                                                                                                                                                               
-                            }                                                                                                                                                                                           
-                            if(book.returnDate.isEqual(Main.today))                                                                                                                                                     
-                            {                                                                                                                                                                                           
-                                System.out.println("\nToday is the due date for the book with details below! ");                                                                                                        
-                                System.out.println("Book Name: " + book.name + " Book Id: " + book.id);                                                                                                                 
-                                System.out.println("BorrowerName: " + book.borrowerName + " Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);                                                       
-                            }                                                                                                                                                                                           
-                            else if(Main.today.compareTo(book.returnDate) > 7)                                                                                                                                          
-                            {                                                                                                                                                                                           
-                                System.out.println("\nOverDue notice!!!!");                                                                                                                                             
-                                System.out.println("It has been " + Main.today.compareTo(book.returnDate) + " Days till due date");                                                                                     
-                                System.out.println("Book Name: " + book.name + " Book Id: " + book.id);                                                                                                                 
-                                System.out.println("BorrowerName: " + book.borrowerName + " Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);                                                       
-                            }                                                                                                                                                                                           
-                        }                                                                                                                                                                                               
-                        break;                                                                                                                                                                                          
-                                                                                                                                                                                                                        
-                 default: return;                                                                                                                                                                                       
-                                                                                                                                                                                                                        
-            }                                                                                                                                                                                                           
-        }                                                                                                                                                                                                               
-                                                                                                                                                                                                                        
-    }                                                                                                                                                                                                                   
-                                                                                                                                                                                                                        
-    private static void addBook() {                                                                                                                                                                                     
-        System.out.println("Enter Details of the Book: (name, id)");                                                                                                                                                    
-        Scanner in = new Scanner(System.in);                                                                                                                                                                            
-        Book book  = new Book(in.next(), in.nextInt(), null, null, null);                                                                                                                                               
-        books.add(book);                                                                                                                                                                                                
-        System.out.println("Book is Added Successfully to Library Database");                                                                                                                                           
-    }                                                                                                                                                                                                                   
-}                                                                                                                                                                                                                       
-                                                                                                                                                                                                                        
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Person {
+    String name;
+    String profession;
+    int bookCount;
+
+    public Person(String name, String profession, int bookCount) {
+        this.name = name;
+        this.profession = profession;
+        this.bookCount = bookCount;
+    }
+}
+
+
+class Book{
+    String name;
+    int id;
+    String borrowerName;
+    String publisherName;
+    String autherName;
+    LocalDate issueDate;
+    LocalDate returnDate;
+
+    public Book(String name, int id, String borrowerName, LocalDate issueDate, LocalDate returnDate, String publisherName, String autherName) {
+        this.name = name;
+        this.id = id;
+        this.borrowerName = borrowerName;
+        this.issueDate = issueDate;
+        this.returnDate = returnDate;
+        this.publisherName = publisherName;
+        this.autherName = autherName;
+    }
+
+    public void setBorrowerName(String borrowerName) {
+        this.borrowerName = borrowerName;
+    }
+
+    public void setIssueDate(LocalDate issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+}
+
+class BookMenu {
+
+    void showBooks(){
+
+
+        for( Book book : Main.books)
+        {
+            System.out.println(book.id + "." + book.name + "\n");
+        }
+
+        if(Main.books.isEmpty()) { System.out.println("SORRY NO BOOK IS AVAILABLE IN DATABASE!!!");return;}
+        System.out.println("Enter book no for further details or 0 for return");
+        int c;
+        Scanner in = new Scanner(System.in);
+        c  = in.nextInt();
+
+        Book selectedBook = searchBookId(c);
+
+        if(selectedBook == null)
+        {
+            return;
+        }
+        //show details of this book now;
+
+        else{
+            showDetails(selectedBook);
+        }
+
+    }
+
+    private void showDetails(Book selectedBook) {
+        System.out.println("Book id : " + selectedBook.id + "\nBook Name: " + selectedBook.name  );
+        System.out.println("Book Author Name: " + selectedBook.autherName + "\nBook Publisher Name: " + selectedBook.publisherName);
+
+            if(selectedBook.borrowerName != null )
+            {
+                System.out.println("This book has been issued.");
+                System.out.println("BorrowerName: " + selectedBook.borrowerName + " Issue Date: " + selectedBook.issueDate + " Return Date: " + selectedBook.returnDate);
+
+            }
+
+
+            System.out.println("\nOptions available for this books");
+            System.out.println("1.DeleteBook 2.IssueBook 3.ReturnBook");
+            Scanner in = new Scanner(System.in);
+            int o = in.nextInt();
+
+
+            switch ( o )
+            {
+                case 1: Main.books.remove(selectedBook);
+                    System.out.println("Book has been Deleted Successfully!!..");
+                    break;
+
+                case 2:
+
+                    if(selectedBook.borrowerName != null ) {  System.out.println("Error! This book is already issued!"); return; }
+
+                    //else
+
+                    System.out.println("Enter Borrower Name and Profession");
+                    String bName = in.next();
+                    String profession = in.next();
+
+                    Person person = findPerson(bName,profession);
+
+                    if(person == null) {
+                        person = new Person(bName, profession ,0);
+                        Main.persons.add(person);
+                    }
+
+
+                    if(person.profession.equals("student"))
+                    {
+                        if(person.bookCount >2)
+                        {
+                            System.out.println("Error !! Can't borrow books more than 5 for a student");
+                            break;
+                        }
+                    }
+
+                    else if(person.profession.equals("faculty"))
+                    {
+                        if(person.bookCount >3)
+                        {
+                            System.out.println("Error !! Can't borrow books more than 10 for a faculty");
+                        }
+                        break;
+                    }
+
+                    person.bookCount++;
+                    selectedBook.setBorrowerName(person.name);
+
+                    System.out.println("Enter Issue Date(Year,Month,Day)");
+                    LocalDate iDate = LocalDate.of(in.nextInt(),in.nextInt(),in.nextInt());
+                    selectedBook.setIssueDate(iDate);
+
+                    if(person.profession.equals("student"))
+                    {
+                        selectedBook.setReturnDate(selectedBook.issueDate.plusDays(15));
+                    }
+                    else
+                    {
+                        selectedBook.setReturnDate(selectedBook.issueDate.plusDays(30));
+                    }
+
+                    System.out.println("Book has been Issued Successfully...");
+                    break;
+
+                case 3:
+                    System.out.println("Return Book in process.....");
+
+                        if(Main.today.compareTo(selectedBook.returnDate) > 7)
+                        {
+                            int span2 = Main.today.compareTo(selectedBook.returnDate) - 7;
+                            double charge = 7 * 2.50;
+                            charge += span2 * 5;
+
+                            System.out.println("Charged for the late return (after " + span2 + 7 + "days) is " + "Rs." + charge);
+                            System.out.println("....................");
+                            System.out.println("This book is successfully returned now..");
+
+                            for(Person person1: Main.persons)
+                            {
+                                if(person1.name.equals(selectedBook.borrowerName))
+                                {
+                                    person1.bookCount--;
+                                    break;
+                                }
+                            }
+
+                            selectedBook.borrowerName = "default";
+                            selectedBook.setReturnDate(null);
+                            selectedBook.setIssueDate(null);
+
+                        }
+
+                        else if(Main.today.compareTo(selectedBook.returnDate) <= 7 && Main.today.compareTo(selectedBook.returnDate) > 0)
+                        {  double charge = Main.today.compareTo(selectedBook.returnDate) * 2.50;
+                            System.out.println("Charged for the late return (after " +Main.today.compareTo(selectedBook.returnDate)  + "days) is " + "Rs." + charge);
+                            System.out.println("....................");
+                            System.out.println("This book is successfully returned now..");
+
+                            for(Person person1: Main.persons)
+                            {
+                                if(person1.name.equals(selectedBook.borrowerName))
+                                {
+                                    person1.bookCount--;
+                                    break;
+                                }
+                            }
+
+                            selectedBook.borrowerName = "default";
+                            selectedBook.setReturnDate(null);
+                            selectedBook.setIssueDate(null);
+
+                        }
+
+                    else {
+                        System.out.println("This book has been returned with no charge.");
+
+                            for(Person person1: Main.persons)
+                            {
+                                if(person1.name.equals(selectedBook.borrowerName))
+                                {
+                                    person1.bookCount--;
+                                    break;
+                                }
+                            }
+
+                        selectedBook.borrowerName = "default";
+                        selectedBook.setReturnDate(null);
+                        selectedBook.setIssueDate(null);
+
+                    }
+
+            }
+
+
+    }
+
+    private Person findPerson(String bName, String profession) {
+        for(Person person: Main.persons)
+        {
+            if(bName.equals(person.name) && profession.equals(person.profession))
+            {
+                return person;
+            }
+
+        }
+        return null;
+    }
+
+    private Book searchBookId(int c)
+    {
+        for(Book book : Main.books)
+        {
+            if(book.id == c)
+            {
+                return book;
+            }
+        }
+
+        return null;
+    }
+}
+
+class BookWork{
+
+}
+
+public class Main{
+    static ArrayList<Book> books = new ArrayList<>();
+    static ArrayList<Person> persons = new ArrayList<>();
+    static LocalDate today = LocalDate.now();
+    public static void main(String[] args)
+    {
+
+        while(true)
+        {
+            System.out.println("\n\nHi Today is: " + Main.today);
+            System.out.println("1.Add Books 2.Show Books 3.(Today + 1) 4.(Today - 1) 5.(Today + 5) 6.(Today -5) 7.Notices 8.Search with publisherName 9.Search with authorName 10.My account");
+            int c;
+            Scanner in = new Scanner(System.in);
+            c = in.nextInt();
+            switch (c)
+            {
+                case 1: addBook();
+                    break;
+
+                case 2: BookMenu bookMenu = new BookMenu();
+                    bookMenu.showBooks();
+                    break;
+
+                case 3: Main.today = Main.today.plusDays(1);
+                        break;
+
+                case 4: Main.today = Main.today.plusDays(-1);
+                        break;
+
+                case 5: Main.today = Main.today.plusDays(5);
+                        break;
+
+                case 6: Main.today = Main.today.plusDays(-5);
+                        break;
+
+                case 7: for(Book book: Main.books)
+                        {
+                            if(book.returnDate == null)
+                            {
+                                continue;
+                            }
+                            if(book.returnDate.isEqual(Main.today))
+                            {
+                                System.out.println("\nToday is the due date for the book with details below! ");
+                                System.out.println("Book Name: " + book.name + " Book Id: " + book.id);
+                                System.out.println("BorrowerName: " + book.borrowerName + " Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);
+                            }
+                            else if(Main.today.compareTo(book.returnDate) > 7)
+                            {
+                                System.out.println("\nOverDue notice!!!!");
+                                System.out.println("It has been " + Main.today.compareTo(book.returnDate) + " Days till due date");
+                                System.out.println("Book Name: " + book.name + " Book Id: " + book.id);
+                                System.out.println("BorrowerName: " + book.borrowerName + " Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);
+                            }
+                        }
+                        break;
+
+                case 8: System.out.println("Enter Publisher Name: ");
+                        String pName;
+                        pName = in.next();
+                        int f = 0;
+                        for(Book book: Main.books)
+                        {
+                            if(book.publisherName.equals(pName))
+                            {
+                                System.out.println("Book found with the publisher name: " + book.publisherName);
+                                System.out.println("Book Details: ");
+                                System.out.println("Book Name: " + book.name + " Book Id: " + book.id);
+                                System.out.println("BorrowerName: " + book.borrowerName + " Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);
+                                f = 1;
+                                System.out.println("\n");
+                            }
+                        }
+                        if(f == 0)
+                            System.out.println("No Book found with the publisher Name: " + pName);
+
+                        break;
+
+                case 9: System.out.println("Enter Author Name: ");
+                    String aName;
+                    aName = in.next();
+                    int f1 = 0;
+                    for(Book book: Main.books)
+                    {
+                        if(book.autherName.equals(aName))
+                        {
+                            System.out.println("Book found with the author name: " + book.autherName);
+                            System.out.println("Book Details: ");
+                            System.out.println("Book Name: " + book.name + " Book Id: " + book.id);
+                            System.out.println("BorrowerName: " + book.borrowerName + " Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);
+                            f1 = 1;
+                            System.out.println("\n");
+                        }
+                    }
+                    if(f1 == 0)
+                        System.out.println("No Book found with the author Name: " + aName);
+
+                    break;
+
+                case 10: System.out.println("Enter UserName: ");
+                         String uName = in.next();
+                         int f2 = 0;
+                         int f3 = 0;
+                         for(Person person : Main.persons)
+                         {
+                             if(person.name.equals(uName))
+                             {
+                                 f2 = 1;
+                                 System.out.println("------------------------------------------------------------------");
+                                 System.out.println("------------------------------------------------------------------");
+                                 System.out.println("\nUser account found with the username: " + person.name);
+                                 System.out.println("Account details: ");
+                                 System.out.println("User profession: " + person.profession + " User bookCount: " + person.bookCount);
+
+                                 //check if the books are borrowed by the user
+                                 System.out.println("Checking for the books issued with the User name: " + person.name);
+
+                                 for(Book book: Main.books)
+                                 {
+                                     if(book.borrowerName.equals(uName))
+                                     {
+                                         System.out.println("\nBook id: " + book.id + "Book Name: " + book.name);
+                                         System.out.println("Issue Date: " + book.issueDate + " Return Date: " + book.returnDate);
+                                         if(Main.today.compareTo(book.returnDate) > 7)
+                                         {
+                                             int span2 = Main.today.compareTo(book.returnDate) - 7;
+                                             double charge = 7 * 2.50;
+                                             charge += span2 * 5;
+
+                                             System.out.println("This book has overdue charges!!!");
+                                             System.out.println("Charge for the late return (for " + span2 + 7 + "days) is " + "Rs." + charge);
+                                             System.out.println("------------------------------------------------------------------");
+                                         }
+
+                                         else if(Main.today.compareTo(book.returnDate) <= 7 && Main.today.compareTo(book.returnDate) > 0)
+                                         {  double charge = Main.today.compareTo(book.returnDate) * 2.50;
+                                             System.out.println("This book has overdue charges!!!");
+                                             System.out.println("Charge for the late return (for " +Main.today.compareTo(book.returnDate)  + "days) is " + "Rs." + charge);
+                                             System.out.println("------------------------------------------------------------------");
+
+                                         }
+
+                                         else {
+                                             System.out.println("This book has no overdue charges...");
+                                             System.out.println("Days left to return this book: " + book.returnDate.compareTo(Main.today));
+                                             System.out.println("------------------------------------------------------------------");
+                                         }
+                                        f3 = 1;
+                                     }
+                                 }
+                              }
+                         }
+                            if(f2 == 0)
+                            {
+                                System.out.println("!! NO USER DATA FOUND WITH THE USERNAME: " + uName);
+                                System.out.println("------------------------------------------------------------------");
+                                System.out.println("------------------------------------------------------------------");
+
+                            }
+                            else if(f3 == 0)
+                            {
+                                System.out.println("!! No Books Issued with this UserName!");
+                                System.out.println("------------------------------------------------------------------");
+                                System.out.println("------------------------------------------------------------------");
+
+                            }
+                            break;
+
+
+                 default: return;
+
+            }
+        }
+
+    }
+
+    private static void addBook() {
+        System.out.println("Enter Details of the Book: (name, id , publisherName, authorName)");
+        Scanner in = new Scanner(System.in);
+        Book book  = new Book(in.next(), in.nextInt(), null, null, null, in.next(), in.next());
+        books.add(book);
+        System.out.println("Book is Added Successfully to Library Database");
+    }
+}
